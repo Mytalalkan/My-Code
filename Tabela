@@ -1,0 +1,231 @@
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right: 0px !important;">
+<style>
+#quests-table{
+background: #744f24;
+/*margin-top: 34px;*/
+}
+#quests-table table {
+border-spacing: 0px;
+font-size: 12px;
+table-layout: fixed;
+text-align: center;
+width: 100%;
+}
+#quests-table th {
+font-weight: 400;
+color: white;
+text-align: center;
+vertical-align: middle;
+}
+#quests-table tr {
+height: 30px;
+width: 100%;
+}
+#quests-table td {
+overflow: hidden;
+width: 64px;
+border-left: #D9CFBA solid 1px;
+/*text-align: center;*/
+vertical-align: middle;
+color: black;
+font-weight: 700;
+font-size: 1.25rem;
+}
+.quest-name {
+padding-left: 10px;
+}
+#quests-table .color-1{
+background: #F1E5CB;
+}
+#quests-table .color-2{
+background: #E6DAC1;
+}
+.quest-name {
+padding-left: 10px;
+}
+.quest-counter {
+padding-right: 10px;
+}
+</style>
+<script type="text/javascript">  
+var x = setInterval(function() {
+var asgardQuests = [{"name":"In\u00edcio do Triple EXP","hour":"00","min":"00","day":[0,1,2,3,4,5,6]},{"name":"In\u00edcio do B\u00f4nus da \u00c1gua","hour":"00","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"00","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"01","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Fim do Triple EXP","hour":"05","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Fim do B\u00f4nus da \u00c1gua","hour":"05","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"12","min":"00","day":[0,1,2,3,4,5,6]},{"name":"In\u00edcio do Triple EXP","hour":"12","min":"00","day":[0,1,2,3,4,5,6]},{"name":"In\u00edcio do B\u00f4nus da \u00c1gua","hour":"12","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"14","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"16","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Fim do Triple EXP","hour":"12","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Fim do B\u00f4nus da \u00c1gua","hour":"12","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"18","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"19","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Arena Real","hour":"20","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Guerra de Cidades","hour":"20","min":"00","day":[0]},{"name":"Arena Real","hour":"20","min":"30","day":[0,1,2,3,4,5,6]},{"name":"Guerra de Noatun","hour":"21","min":"00","day":[0]},{"name":"Guerra de Torres","hour":"21","min":"00","day":[1,2,3,4,5]},{"name":"Nasc. do Kefra","hour":"22","min":"00","day":[1]},{"name":"Arena Real de Reinos ","hour":"22","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Castelo de Loki ","hour":"23","min":"00","day":[0,1,2,3,4,5,6]},{"name":"Morte S\u00fabita","hour":"23","min":"45","day":[0,1,2,3,4,5,6]}];
+asgardQuests = organizeQuests(asgardQuests);
+printQuestOnHTML("asgard", asgardQuests);
+}, 1000);
+function changeSegment(server){
+if(server === 'asgard') {
+var x = document.getElementById("quests-table");
+var mainBtn = document.getElementById("btnAsgard");
+}
+else if(server === 'origem') {
+var y = document.getElementById("quests-table");
+var secondaryBtn = document.getElementById("btnAsgard");
+}
+if (x.style.display != "block") {
+x.style.display = "block";
+}
+mainBtn.style.color = "rgba(255, 196, 0, 1)";
+mainBtn.style.borderBottom  = "0px";
+secondaryBtn.style.color = "white";
+secondaryBtn.style.borderBottom  = "2px solid #1f1509";
+}
+function compareDistances(a, b) {
+if (a.totalSeconds === b.totalSeconds) {
+return 0;
+}
+else {
+return (a.totalSeconds < b.totalSeconds) ? -1 : 1;
+}
+}
+function printQuestOnHTML(serverName, quests) {
+for (var i = 0; i < quests.length && i < 12; i++) {
+var hours = Math.floor((quests[i].distance)/(1000 * 60 * 60));
+var minutes = Math.floor((quests[i].distance % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((quests[i].distance % (1000 * 60)) / 1000);
+document.getElementById(serverName + "-name" + i).innerHTML = quests[i].hour + ":" + quests[i].min + " - " + quests[i].name;
+if(hours >= 48) {
+document.getElementById(serverName + "-hora" + i).innerHTML = ("0" + (quests[i].questDay.getDate())).slice(-2) + "/"  + ("0" + (quests[i].questDay.getMonth()+1)).slice(-2);
+}
+else {
+document.getElementById(serverName + "-hora" + i).innerHTML = ("00" + hours).slice(-2) + ":"  + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
+}
+}
+}
+function organizeQuests(quests) {
+var d = new Date();
+var i;
+for (i = 0; i < quests.length; i++) {
+var finalHour = parseInt(quests[i].hour, 10);
+var finalMin = parseInt(quests[i].min, 10);
+var extraDays = 0;
+var now = new Date().getTime();
+if(quests[i].day.length == 1) {
+if(d.getDay() == quests[i].day[0]) {
+extraDays = 7;
+if(d.getHours() < finalHour) {
+extraDays = 0;
+}
+else if(d.getHours() == finalHour) {
+if(d.getMinutes() < finalMin)
+{
+extraDays = 0;
+}
+}
+}
+else if(d.getDay() < quests[i].day[0]){
+extraDays = quests[i].day[0] - d.getDay();
+}
+else{
+extraDays = (quests[i].day[0] - d.getDay()) + 7;
+}
+}
+else {
+var daysList = new Array();
+for (j = 0; j < quests[i].day.length; j++) {
+if(d.getDay() == quests[i].day[j]) {
+if(d.getHours() < finalHour) {
+daysList.push(0);
+}
+else if(d.getHours() == finalHour) {
+if(d.getMinutes() < finalMin)
+{
+daysList.push(0);
+}
+}
+}
+else if(d.getDay() < quests[i].day[j])
+daysList.push(quests[i].day[j] - d.getDay());
+else
+daysList.push(quests[i].day[j] - d.getDay() + 7);
+}
+extraDays = daysList[0];
+for (j = 0; j < daysList.length; j++) {
+if(daysList[j] < extraDays)
+extraDays = daysList[j];
+}
+}
+var questDay = new Date();
+questDay.setDate(d.getDate()+extraDays);
+var countDownDate = new Date(questDay.getFullYear(), questDay.getMonth() , questDay.getDate() , finalHour, finalMin).getTime();  
+var distance = countDownDate - now;
+quests[i].distance = distance;
+quests[i].totalSeconds = Math.floor(distance/1000);
+quests[i].questDay = questDay;
+}
+quests.sort(compareDistances);
+return quests;
+}
+document.onreadystatechange = function () {
+if (document.readyState == "interactive") {
+var chance = Math.floor((Math.random() * 100));
+if(chance < 50)
+changeSegment('asgard');
+}
+};
+</script>
+<div style="max-height: 410px; overflow: hidden;">
+<div style="display:flex;">
+<button id="btnAsgard" onclick="if (!window.__cfRLUnblockHandlers) return false; changeSegment('asgard')" style="background-color: #744f24;border-color: #744f24;color: rgba(255, 196, 0, 1);width:calc(100% + 1px);">ASGARD</button>
+</div>
+<div id="quests-table" style="display: block;">
+<table style="border: #4B3231 solid 0px;">
+<tbody>
+</tbody><thead>
+<tr>
+<th colspan="8" style="height: 45px;font-size:1.45rem;"><strong>PRÓXIMAS QUESTS</strong><br>(Horário de Brasília)</th>
+</tr>
+</thead>
+<tbody><tr class="color-1">
+<td id="asgard-name0" class="quest-name" colspan="6">05:00 - Fim do Triple EXP</td>
+<td id="asgard-hora0" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">03:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name1" class="quest-name" colspan="6">05:00 - Fim do Bônus da Água</td>
+<td id="asgard-hora1" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">03:02:13</td>
+</tr>
+<tr class="color-1">
+<td id="asgard-name2" class="quest-name" colspan="6">12:00 - Arena Real</td>
+<td id="asgard-hora2" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">10:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name3" class="quest-name" colspan="6">12:00 - Início do Triple EXP</td>
+<td id="asgard-hora3" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">10:02:13</td>
+</tr>
+<tr class="color-1">
+<td id="asgard-name4" class="quest-name" colspan="6">12:00 - Início do Bônus da Água</td>
+<td id="asgard-hora4" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">10:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name5" class="quest-name" colspan="6">12:00 - Fim do Triple EXP</td>
+<td id="asgard-hora5" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">10:02:13</td>
+</tr>
+<tr class="color-1">
+<td id="asgard-name6" class="quest-name" colspan="6">12:00 - Fim do Bônus da Água</td>
+<td id="asgard-hora6" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">10:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name7" class="quest-name" colspan="6">14:00 - Arena Real</td>
+<td id="asgard-hora7" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">12:02:13</td>
+</tr>
+<tr class="color-1">
+<td id="asgard-name8" class="quest-name" colspan="6">16:00 - Arena Real</td>
+<td id="asgard-hora8" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">14:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name9" class="quest-name" colspan="6">18:00 - Arena Real</td>
+<td id="asgard-hora9" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">16:02:13</td>
+</tr>
+<tr class="color-1">
+<td id="asgard-name10" class="quest-name" colspan="6">19:00 - Arena Real</td>
+<td id="asgard-hora10" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">17:02:13</td>
+</tr>
+<tr class="color-2">
+<td id="asgard-name11" class="quest-name" colspan="6">20:00 - Arena Real</td>
+<td id="asgard-hora11" class="quest-counter" colspan="2" style="text-align: right;border-left: 0px;">18:02:13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
